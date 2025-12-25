@@ -7,6 +7,7 @@ app = FastAPI(title="Prashne API")
 # Setup CORS
 origins = [
     "http://localhost:5173",
+    "https://prashne.ai"
 ]
 
 app.add_middleware(

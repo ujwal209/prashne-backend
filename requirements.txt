@@ -4,3 +4,9 @@ supabase
 python-dotenv
 pydantic-settings
 pyjwt
+httpx
+cloudinary
+python-multipart
+groq
+pypdf
+email-validator
