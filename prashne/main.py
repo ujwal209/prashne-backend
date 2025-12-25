@@ -5,14 +5,10 @@ from prashne.api.router import api_router
 app = FastAPI(title="Prashne API")
 
 # Setup CORS
-origins = [
-    "http://localhost:5173",
-    "https://prashne.ai"
-]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=".*",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
