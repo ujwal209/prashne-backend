@@ -2,7 +2,7 @@
     "rewrites": [
         {
             "source": "/(.*)",
-            "destination": "/prashne/main.py"
+            "destination": "/api/index.py"
         }
     ]
 }
