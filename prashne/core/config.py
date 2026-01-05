@@ -1,5 +1,5 @@
 from pydantic_settings import BaseSettings
-
+from typing import Optional 
 class Settings(BaseSettings):
     SUPABASE_URL: str
     SUPABASE_KEY: str
@@ -9,6 +9,14 @@ class Settings(BaseSettings):
     CLOUDINARY_CLOUD_NAME: str
     CLOUDINARY_API_KEY: str
     CLOUDINARY_API_SECRET: str
+    VAPI_PUBLIC_KEY: Optional[str] = None
+    # LiveKit
+    LIVEKIT_URL: str | None = None
+    LIVEKIT_API_KEY: str | None = None
+    LIVEKIT_API_SECRET: str | None = None
+    ELEVEN_LABS_API_KEY: str | None = None
+    VAPI_PUBLIC_KEY: str | None = None
+    DEEPGRAM_API_KEY: str | None = None
 
     class Config:
         env_file = "../../.env"

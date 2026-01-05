@@ -78,15 +78,20 @@ async def upload_resumes(
 @router.get("/")
 def get_resumes(current_user: Dict[str, Any] = Depends(require_hr_staff)):
     user_id = current_user.get("sub")
+    
+    # helper to get role
+    app_meta = current_user.get("app_metadata", {})
+    user_meta = current_user.get("user_metadata", {})
+    role = app_meta.get("role") or user_meta.get("role")
+
     try:
-        # HR Staff sees only their own resumes? Or all? 
-        # Usually staff sees all in a team, but filtering by 'created_by' keeps it personal for now (My Activity).
-        # We can expand later. For now, preserving 'My Parsed' behavior.
-        res = supabase_admin.table("resumes")\
-            .select("*")\
-            .eq("created_by", user_id)\
-            .order("created_at", desc=True)\
-            .execute()
+        query = supabase_admin.table("resumes").select("*")
+        
+        # If NOT admin, filter by own ID
+        if role not in ["hr_admin", "super_admin"]:
+            query = query.eq("created_by", user_id)
+            
+        res = query.order("created_at", desc=True).execute()
         return res.data
     except Exception as e:
         print(f"Fetch Error: {e}")
@@ -95,9 +100,20 @@ def get_resumes(current_user: Dict[str, Any] = Depends(require_hr_staff)):
 @router.get("/stats")
 def get_resume_stats(current_user: Dict[str, Any] = Depends(require_hr_staff)):
     user_id = current_user.get("sub")
+    
+    # helper to get role
+    app_meta = current_user.get("app_metadata", {})
+    user_meta = current_user.get("user_metadata", {})
+    role = app_meta.get("role") or user_meta.get("role")
+
     count = 0
     try:
-        res = supabase_admin.table("resumes").select("id", count="exact").eq("created_by", user_id).execute()
+        query = supabase_admin.table("resumes").select("id", count="exact")
+        
+        if role not in ["hr_admin", "super_admin"]:
+            query = query.eq("created_by", user_id)
+            
+        res = query.execute()
         count = res.count
     except:
         count = 0 
